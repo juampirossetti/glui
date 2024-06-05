@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { MouseEvent, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -56,7 +56,7 @@ const headCells: readonly HeadCell[] = [
 function SortableTableHead(props: HeadTableProps) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof Data) => (event: MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -104,11 +104,11 @@ function SortableTableToolbar() {
   );
 }
 export default function SortableTable({ ships }: { ships: ShipData[] }) {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('name');
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof Data>('name');
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    event: MouseEvent<unknown>,
     property: keyof Data,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -116,7 +116,7 @@ export default function SortableTable({ ships }: { ships: ShipData[] }) {
     setOrderBy(property);
   };
 
-  const orderedRows = React.useMemo(() => {
+  const orderedRows = useMemo(() => {
     const rows = formatData(ships);
     return stableSort(rows, getComparator(order, orderBy));
   }, [order, orderBy, ships]);
